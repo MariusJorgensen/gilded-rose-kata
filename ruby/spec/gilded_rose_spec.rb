@@ -45,3 +45,32 @@ describe 'Sulfuras, Hand of Ragnaros' do
     expect { gilded_rose.update_quality }.not_to change { sulfuras.quality }
   end
 end
+
+describe 'Normal Item' do
+
+  it 'decreases quality when it gets older' do
+    normal_item = Item.new('Normal Item', 10, 10)
+    gilded_rose = GildedRose.new([normal_item])
+
+    expect { gilded_rose.update_quality }.to change { normal_item.quality }.by -1
+  end
+
+  it 'will never have a quality less than 0' do
+    normal_item = Item.new('Normal Item', 10, 0)
+    gilded_rose = GildedRose.new([normal_item])
+
+    expect { gilded_rose.update_quality }.not_to change { normal_item.quality }
+  end
+
+  context 'when the sell by day has passed' do
+    it 'decrease quality twice as fast' do
+      normal_item = Item.new('Normal Item', 0, 50)
+      gilded_rose = GildedRose.new([normal_item])
+
+      expect { gilded_rose.update_quality }.to change { normal_item.quality }.by -2
+    end
+  end
+
+
+
+end
