@@ -26,4 +26,12 @@ describe 'Aged Brie' do
     end
   end
 
+  context 'when the quality is 50' do
+    it 'does not increase in quality' do
+      aged_brie = Item.new('Aged Brie', 1, 50)
+      gilded_rose = GildedRose.new([aged_brie])
+
+      expect { gilded_rose.update_quality }.not_to change { aged_brie.quality }.from 50
+    end
+  end
 end
