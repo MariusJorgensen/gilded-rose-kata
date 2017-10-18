@@ -47,7 +47,6 @@ describe 'Sulfuras, Hand of Ragnaros' do
 end
 
 describe 'Normal Item' do
-
   it 'decreases quality when it gets older' do
     normal_item = Item.new('Normal Item', 10, 10)
     gilded_rose = GildedRose.new([normal_item])
@@ -70,7 +69,33 @@ describe 'Normal Item' do
       expect { gilded_rose.update_quality }.to change { normal_item.quality }.by -2
     end
   end
+end
 
+describe 'Backstage passes' do
+  context 'when the sell by date is between 10 and 6 days away' do
+    it 'increases in quality twice as fast' do
+      backstage_pass = Item.new("Backstage passes to a TAFKAL80ETC concert", 10, 10)
+      gilded_rose = GildedRose.new([backstage_pass])
 
+      expect { gilded_rose.update_quality }.to change { backstage_pass.quality }.by 2
+    end
+  end
 
+  context 'when the sell by date is between 5 and 0 days away' do
+    it 'increases in quality three times as fast' do
+      backstage_pass = Item.new("Backstage passes to a TAFKAL80ETC concert", 5, 10)
+      gilded_rose = GildedRose.new([backstage_pass])
+
+      expect { gilded_rose.update_quality }.to change { backstage_pass.quality }.by 3
+    end
+  end
+
+  context 'when the sell by date has been hit' do
+    it 'drop the quality to 0' do
+      backstage_pass = Item.new("Backstage passes to a TAFKAL80ETC concert", 0, 10)
+      gilded_rose = GildedRose.new([backstage_pass])
+
+      expect { gilded_rose.update_quality }.to change { backstage_pass.quality }.to 0
+    end
+  end
 end
