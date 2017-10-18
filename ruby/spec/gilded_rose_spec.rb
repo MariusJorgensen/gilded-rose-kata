@@ -22,4 +22,14 @@ describe 'Aged Brie' do
       expect { gilded_rose.update_quality }.to change { aged_brie.quality }.by 2
     end
   end
+
+  context 'when the expire date has passed' do
+    it 'increases in quality by 2' do
+      aged_brie = Item.new('Aged Brie', -1, 1)
+      gilded_rose = GildedRose.new([aged_brie])
+
+      expect { gilded_rose.update_quality }.to change { aged_brie.quality }.by 2
+    end
+  end
+  
 end
