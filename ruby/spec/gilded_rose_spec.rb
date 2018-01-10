@@ -46,6 +46,12 @@ describe 'Sulfuras, Hand of Ragnaros' do
 
     expect { update_quality_of(sulfuras) }.not_to change { sulfuras.quality }
   end
+
+  it 'will never reduce the sell by date' do
+    sulfuras = Item.new('Sulfuras, Hand of Ragnaros', 10, 80)
+
+    expect { update_quality_of(sulfuras)}.not_to change { sulfuras.sell_in }
+  end
 end
 
 describe 'Normal Item' do
@@ -67,6 +73,12 @@ describe 'Normal Item' do
 
       expect { update_quality_of(normal_item) }.to change { normal_item.quality }.by -2
     end
+  end
+
+  it 'reduces the days left to sell it by 1' do
+    normal_item = Item.new('Normal Item', 10, 10)
+
+    expect { update_quality_of(normal_item) }.to change { normal_item.sell_in }.by -1
   end
 end
 
@@ -93,6 +105,12 @@ describe 'Backstage passes' do
 
       expect { update_quality_of(backstage_pass) }.to change { backstage_pass.quality }.to 0
     end
+  end
+
+  it 'reduces the days left to sell it by 1' do
+    backstage_pass = Item.new('Backstage passes to a TAFKAL80ETC concert', 10, 10)
+
+    expect { update_quality_of(backstage_pass) }.to change { backstage_pass.sell_in }.by -1
   end
 end
 
