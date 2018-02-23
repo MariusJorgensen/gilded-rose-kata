@@ -3,10 +3,24 @@ require 'gilded_rose'
 require 'pry'
 
 describe 'Aged Brie' do
+  it 'reduces the days left to sell it by 1' do
+    aged_brie = Item.new('Aged Brie', 10, 10)
+
+    expect { update_quality_of(aged_brie) }.to change { aged_brie.sell_in }.by -1
+  end
+
   it 'increases in Quality as it matures' do
     aged_brie = Item.new('Aged Brie', 30, 1)
 
-    expect { update_quality_of(aged_brie)}.to change { aged_brie.quality }
+    expect { update_quality_of(aged_brie)}.to change { aged_brie.quality }.by 1
+  end
+
+  context 'when there is one day left to sell' do
+    it 'increases in quality by 2' do
+      aged_brie = Item.new('Aged Brie', 1, 4)
+
+      expect { update_quality_of(aged_brie) }.to change { aged_brie.quality }.by 1
+    end
   end
 
   context 'when the expire date hits' do
@@ -32,12 +46,6 @@ describe 'Aged Brie' do
       expect { update_quality_of(aged_brie) }.not_to change { aged_brie.quality }.from 50
     end
   end
-
-  it 'reduces the days left to sell it by 1' do
-    aged_brie = Item.new('Aged Brie', 10, 10)
-
-    expect { update_quality_of(aged_brie) }.to change { aged_brie.sell_in }.by -1
-  end
 end
 
 describe 'Sulfuras, Hand of Ragnaros' do
@@ -55,6 +63,13 @@ describe 'Sulfuras, Hand of Ragnaros' do
 end
 
 describe 'Normal Item' do
+  it 'reduces the days left to sell it by 1' do
+    normal_item = normal_item(sell_in: 10, quality: 10)
+
+    expect { update_quality_of(normal_item) }
+      .to change { normal_item.sell_in }.by -1
+  end
+
   it 'decreases quality when it gets older' do
     normal_item = Item.new('Normal Item', 10, 10)
 
@@ -75,10 +90,8 @@ describe 'Normal Item' do
     end
   end
 
-  it 'reduces the days left to sell it by 1' do
-    normal_item = Item.new('Normal Item', 10, 10)
-
-    expect { update_quality_of(normal_item) }.to change { normal_item.sell_in }.by -1
+  def normal_item(sell_in:, quality:)
+    Item.new('Normal Item', sell_in, quality)
   end
 end
 
