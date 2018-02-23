@@ -125,6 +125,22 @@ describe 'Backstage passes' do
 
     expect { update_quality_of(backstage_pass) }.to change { backstage_pass.sell_in }.by -1
   end
+
+  context 'when the concert has finished' do
+    it 'has no quality' do
+      backstage_pass = Item.new('Backstage passes to a TAFKAL80ETC concert', -1, 10)
+
+      expect { update_quality_of(backstage_pass) }.to change { backstage_pass.quality }.to 0
+    end
+
+    context 'and the quality is already 0' do
+      it 'should not change from 0' do
+        backstage_pass = Item.new('Backstage passes to a TAFKAL80ETC concert', -1, 0)
+
+        expect { update_quality_of(backstage_pass) }.to_not change { backstage_pass.quality }.from 0
+      end
+    end
+  end
 end
 
 def update_quality_of(item)
