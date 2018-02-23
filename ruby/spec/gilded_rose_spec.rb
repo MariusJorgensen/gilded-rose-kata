@@ -141,6 +141,22 @@ describe 'Backstage passes' do
       end
     end
   end
+
+  context 'when there are precisely 11 days left to sell' do
+    it 'increases quality by 1' do
+      backstage_pass = Item.new('Backstage passes to a TAFKAL80ETC concert', 11, 3)
+
+      expect { update_quality_of(backstage_pass) }.to change { backstage_pass.quality }.by 1
+    end
+  end
+
+  context 'when there are precisely 6 days left to sell' do
+    it 'increases quality by 2' do
+      backstage_pass = Item.new('Backstage passes to a TAFKAL80ETC concert', 6, 3)
+
+      expect { update_quality_of(backstage_pass) }.to change { backstage_pass.quality }.by 2
+    end
+  end
 end
 
 def update_quality_of(item)
