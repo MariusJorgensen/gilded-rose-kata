@@ -37,6 +37,14 @@ describe 'Aged Brie' do
 
       expect { update_quality_of(aged_brie) }.to change { aged_brie.quality }.by 2
     end
+
+    context 'and the quality is 50' do
+      it 'does not increase in quality' do
+        aged_brie = Item.new('Aged Brie', -1, 50)
+
+        expect { update_quality_of(aged_brie) }.not_to change { aged_brie.quality }.from 50
+      end
+    end
   end
 
   context 'when the quality is 50' do
@@ -87,6 +95,16 @@ describe 'Normal Item' do
       normal_item = Item.new('Normal Item', 0, 50)
 
       expect { update_quality_of(normal_item) }.to change { normal_item.quality }.by -2
+    end
+  end
+
+  context 'when it has expired' do
+    context 'and the quality is already 0' do
+      it 'does not change in quality' do
+        normal_item = Item.new('Normal Item', -1, 0)
+
+        expect { update_quality_of(normal_item) }.not_to change { normal_item.quality }.from 0
+      end
     end
   end
 
